@@ -1,0 +1,12 @@
+[window]
+fullscreen = false
+vsync = false
+width = 1920
+height = 1080
+
+[system]
+fps = 120
+
+[debug]
+show_fps = true
+show_fps_every = 3
