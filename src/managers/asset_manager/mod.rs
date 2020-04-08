@@ -88,11 +88,17 @@ impl AssetManager {
         self.get_static_texture(path).unwrap()
     }
 
-    /// Request a StaticTexture. If the pixel data has not been loaded yet, do so and then request again.
+    /// Check if a StaticTexture is already loaded and request or load it respectively
     pub fn get_or_load_static_texture(&mut self, path: &Path) -> StaticTexture {
-        let static_texture_buffer = self.static_texture_buffers.entry(path.to_path_buf())
-            .or_insert(StaticTextureBuffer::new(self.load_piston_buffer(path)));
-        StaticTexture::new(static_texture_buffer)
+        if self.is_static_texture_loaded(path) {
+            self.get_static_texture(path).unwrap()
+        } else {
+            self.load_and_get_static_texture(path)
+        }
+    }
+
+    pub fn is_static_texture_loaded(&self, path: &Path) -> bool {
+        self.static_texture_buffers.contains_key(path)
     }
 
     /// Load the pixel data and meta data of an AnimatedTexture
@@ -113,10 +119,17 @@ impl AssetManager {
         self.get_animated_texture(path).unwrap()
     }
 
-    /// Request an AnimatedTexture. If the pixel data and meta data has not been loaded yet, do so and then request again.
+    /// Check if an AnimatedTexture is already loaded and request or load it respectively
     pub fn get_or_load_animated_texture(&mut self, path: &Path, num_frames: u32, frames_per_frame: u32) -> AnimatedTexture {
-        let animated_texture_buffer = self.animated_texture_buffers.entry(path.to_path_buf())
-            .or_insert(AnimatedTextureBuffer::new(self.load_piston_buffer(path), num_frames, frames_per_frame));
-        AnimatedTexture::new(animated_texture_buffer)
+        if self.is_animated_texture_loaded(path) {
+            self.get_animated_texture(path).unwrap()
+        } else {
+            self.load_and_get_animated_texture(path, num_frames, frames_per_frame)
+        }
     }
+
+    pub fn is_animated_texture_loaded(&self, path: &Path) -> bool {
+        self.animated_texture_buffers.contains_key(path)
+    }
+
 }

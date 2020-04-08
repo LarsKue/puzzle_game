@@ -21,7 +21,7 @@ impl Game {
 
     pub fn run(&mut self) -> Result<(), String> {
 
-        self.managers.asset_manager.load_static_texture(&std::path::Path::new("example.png"));
+        let test = self.managers.asset_manager.load_and_get_static_texture(&std::path::Path::new("example.png"));
 
 
         //Main loop
